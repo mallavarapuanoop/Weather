@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ViewModelDelegate: AnyObject {
-    func updateView(with report: CurrentWeather, from searchPoint: SearchPoint)
+    func updateView(with report: CurrentWeather?, from searchPoint: SearchPoint)
 }
 
 class ViewModel {
@@ -28,13 +28,23 @@ class ViewModel {
         }
         
         weatherService.loadWeatherData(for: city) { [self] weatherReport in
-            guard let weatherReport = weatherReport else { return }
+            guard let weatherReport = weatherReport else {
+                delegate?.updateView(with: nil,
+                                     from: searchPoint)
+                return
+            }
+            
+            saveToFile(report: weatherReport)
             self.delegate?.updateView(with: builData(from: weatherReport),
                                       from: searchPoint)
         }
     }
     
-    private func builData(from report: WeatherReport) -> CurrentWeather {
+    private func saveToFile(report: WeatherReport) {
+        WeatherReport.saveToFile(weatherReport: [report])
+    }
+    
+    func builData(from report: WeatherReport) -> CurrentWeather {
         let code = report.weather?[0].icon ?? ""
         let icon = "https://openweathermap.org/img/wn/\(code)@2x.png"
 

@@ -5,6 +5,7 @@
 //  Created by Anoop Mallavarapu on 4/21/23.
 //
 
+import UIKit
 import Foundation
 
 struct WeatherReport: Codable {
@@ -22,6 +23,25 @@ struct WeatherReport: Codable {
     var id: Double?
     var name: String?
     var cod: Double?
+    
+    
+    static let docDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let archiveURL = docDirectory.appending(path: "Weather").appendingPathExtension("plist")
+    
+    
+    static func saveToFile(weatherReport: [WeatherReport]) {
+        let encoder = PropertyListEncoder()
+        
+        let codedReport = try? encoder.encode(weatherReport)
+        try? codedReport?.write(to: archiveURL, options: .noFileProtection)
+    }
+    
+    static func loadFromFile() -> [WeatherReport]? {
+        guard let codedReport = try? Data(contentsOf: archiveURL) else { return nil}
+        let decoder = PropertyListDecoder()
+        
+        return try? decoder.decode(Array<WeatherReport>.self, from: codedReport)
+    }
 }
 
 struct Coordinates: Codable {

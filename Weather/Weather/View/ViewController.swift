@@ -152,27 +152,25 @@ extension ViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Error \(error)")
-        
-//        if manager.lo
-        
-        print("Testing Came here location off")
-        // if the location access is turned off by user add an alert to request for location access again
+        if let lastViewedReport = WeatherReport.loadFromFile(),
+           let lastViewedReport = lastViewedReport.first {
+            DispatchQueue.main.async {
+                self.weatherReportView.configure(with: self.viewModel.builData(from: lastViewedReport))
+                self.weatherReportView.updateCurrentLocationLabel(with: "Last Viewed loaction \nyour location settings is turned off")
+                self.weatherReportView.isHidden = false
+            }
+        }
     }
 }
 
 extension ViewController: ViewModelDelegate {
-    func updateView(with report: CurrentWeather, from searchPoint: SearchPoint) {
+    func updateView(with report: CurrentWeather?, from searchPoint: SearchPoint) {
         switch searchPoint {
         case .locationBased:
             DispatchQueue.main.async {
                 self.weatherReportView.configure(with: report)
                 self.weatherReportView.isHidden = false
             }
-            
-        case .lastLocationSearch:
-            // get the last searched loaction from cache if availabe and show ui
-            print("Testing: camer to last locaton searchPoint")
             
         case .searchBar:
             DispatchQueue.main.async {

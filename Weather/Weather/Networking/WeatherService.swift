@@ -11,7 +11,6 @@ import Foundation
 enum SearchPoint {
     case locationBased
     case searchBar
-    case lastLocationSearch
 }
 
 protocol WeatherServiceType: AnyObject {
@@ -40,6 +39,7 @@ class WeatherService: WeatherServiceType {
                 completion(weatherReport)
             } catch let error {
                 print(error)
+                completion(nil)
             }
         }.resume()
     }

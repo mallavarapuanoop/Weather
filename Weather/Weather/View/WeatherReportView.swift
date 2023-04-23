@@ -66,7 +66,7 @@ class WeatherReportView: BaseView {
     
     var currentLocationLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .black
         label.textAlignment = .left
@@ -124,11 +124,20 @@ class WeatherReportView: BaseView {
         containerview.pinToEdges(to: self)
     }
     
-    func configure(with report: CurrentWeather) {
+    func configure(with report: CurrentWeather?) {
+        guard let report = report else {
+            return
+        }
+        
         currentLocationLabel.text = "My Location"
         myLocationLabel.text = report.cityName
         tempLabel.text = "\(report.currentTemp ?? "")°"
         lowHighTempLabel.text = "H: \(report.hTemp ?? "")°   L: \(report.lTemp ?? "")°"
         layoutIfNeeded()
     }
+    
+    func updateCurrentLocationLabel(with text: String) {
+        currentLocationLabel.text = text
+    }
+        
 }

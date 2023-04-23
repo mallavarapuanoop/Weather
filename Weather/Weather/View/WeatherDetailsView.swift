@@ -20,15 +20,15 @@ class WeatherDetailsView: BaseView {
         return view
     }()
     
-    var lastViewedLabel: UILabel = {
+    var errorLabel: UILabel = {
         let label = UILabel()
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.lineBreakMode = .byTruncatingTail
-        label.text = "Recently Viewed"
+        label.text = "Something went wrong and Try again by entering correct city/state name"
         label.textColor = .black
         label.textAlignment = .left
         label.isHidden = true
-        label.font = UIFont.boldSystemFont(ofSize: 10)
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -54,6 +54,7 @@ class WeatherDetailsView: BaseView {
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .black
+        label.isHidden = true
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 25)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -65,6 +66,7 @@ class WeatherDetailsView: BaseView {
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .black
+        label.isHidden = true
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 50)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -76,6 +78,7 @@ class WeatherDetailsView: BaseView {
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .black
+        label.isHidden = true
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,6 +90,7 @@ class WeatherDetailsView: BaseView {
         label.numberOfLines = 1
         label.lineBreakMode = .byTruncatingTail
         label.textColor = .black
+        label.isHidden = true
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -104,7 +108,7 @@ class WeatherDetailsView: BaseView {
         super.constructSubviewHierarchy()
         containerview.addSubview(imageview)
         
-        detailsStackview.addArrangedSubview(lastViewedLabel)
+        detailsStackview.addArrangedSubview(errorLabel)
         detailsStackview.addArrangedSubview(locationLabel)
         detailsStackview.addArrangedSubview(tempLabel)
         detailsStackview.addArrangedSubview(weatherConditionLabel)
@@ -126,25 +130,41 @@ class WeatherDetailsView: BaseView {
                                     horizantalPadding: 16,
                                     verticalPadding: 16)
         
-        imageview.pinToEdges(to: containerview,
-                             horizantalPadding: 16,
-                             verticalPadding: 16)
+        NSLayoutConstraint.activate([
+            imageview.leadingAnchor.constraint(equalTo: containerview.leadingAnchor),
+            imageview.topAnchor.constraint(equalTo: containerview.topAnchor),
+            imageview.widthAnchor.constraint(equalToConstant: 100),
+            imageview.heightAnchor.constraint(equalToConstant: 100)
+        ])
         
         containerview.pinToEdges(to: self)
     }
     
-    func configure(with report: CurrentWeather) {
+    func configure(with report: CurrentWeather?) {
+        guard let report = report else {
+            hideUnhideViews(with: true)
+            spinner.stopAnimating()
+            return
+        }
+        
         locationLabel.text = report.cityName
         tempLabel.text = "\(report.currentTemp ?? "")°"
         weatherConditionLabel.text = "\(report.weatherCondition ?? "")"
         highLowTempLabel.text = "H: \(report.hTemp ?? "")°   L: \(report.lTemp ?? "")°"
         
-        lastViewedLabel.isHidden = !(report.islastViewed ?? false)
-        
+        hideUnhideViews(with: false)
         spinner.stopAnimating()
         if let icon = report.icon {
             imageview.loadImageUsingCache(withUrl: icon)
         }
         layoutIfNeeded()
+    }
+    
+    private func hideUnhideViews(with value: Bool) {
+        locationLabel.isHidden = value
+        tempLabel.isHidden = value
+        weatherConditionLabel.isHidden = value
+        highLowTempLabel.isHidden = value
+        errorLabel.isHidden = !value
     }
 }
