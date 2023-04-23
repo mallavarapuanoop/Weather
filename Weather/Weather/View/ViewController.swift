@@ -56,6 +56,13 @@ class ViewController: UIViewController {
         return weatherReportView
     }()
     
+    lazy var weatherDetailView: WeatherDetailsView = {
+        let view = WeatherDetailsView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isHidden = true
+        return view
+    }()
+    
     //Initialization
     var locationManager = CLLocationManager()
     let viewModel = ViewModel()
@@ -95,6 +102,7 @@ class ViewController: UIViewController {
         detailsStack.addArrangedSubview(containerview)
         
         detailsStack.addArrangedSubview(weatherReportView)
+        detailsStack.addArrangedSubview(weatherDetailView)
         
         self.view.backgroundColor = .white
         self.view.addSubview(detailsStack)
@@ -118,8 +126,9 @@ class ViewController: UIViewController {
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let city = textField.text {
-            
+            viewModel.loadWeatherData(for: city, searchPoint: .searchBar)
         }
+        weatherDetailView.isHidden = false
         textField.resignFirstResponder()
         return true
     }
@@ -138,39 +147,39 @@ extension ViewController: CLLocationManagerDelegate {
             guard let placemarks = placemarks,
                   let placemark = placemarks.first,
                   let locality = placemark.locality else { return }
-            
-            print("Testing locality:", locality)
-            
-            self.viewModel.currentCity = locality
-            self.viewModel.loadCurrentLocationData()
+            self.viewModel.loadWeatherData(for: locality, searchPoint: .locationBased)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Error \(error)")
+        
+//        if manager.lo
+        
+        print("Testing Came here location off")
         // if the location access is turned off by user add an alert to request for location access again
     }
 }
 
 extension ViewController: ViewModelDelegate {
-    func updateView(with report: WeatherReport) {
-        let currreport: CurrentWeather = CurrentWeather(cityName: report.name ?? "",
-                                                        currentTemp: "\(report.main?.temp ?? 0)",
-                                            hTemp: "\(report.main?.temp_max ?? 0)",
-                                            lTemp: "\(report.main?.temp_min ?? 0)",
-                                                        icon: report.weather?[0].icon)
-        DispatchQueue.main.async {
-            self.weatherReportView.configure(with: currreport)
-            self.weatherReportView.isHidden = false
+    func updateView(with report: CurrentWeather, from searchPoint: SearchPoint) {
+        switch searchPoint {
+        case .locationBased:
+            DispatchQueue.main.async {
+                self.weatherReportView.configure(with: report)
+                self.weatherReportView.isHidden = false
+            }
+            
+        case .lastLocationSearch:
+            // get the last searched loaction from cache if availabe and show ui
+            print("Testing: camer to last locaton searchPoint")
+            
+        case .searchBar:
+            DispatchQueue.main.async {
+                self.weatherDetailView.configure(with: report)
+                self.weatherDetailView.isHidden = false
+            }
         }
     }
 }
 
-
-struct CurrentWeather {
-    let cityName: String?
-    let currentTemp: String?
-    let hTemp: String?
-    let lTemp: String?
-    let icon: String?
-}
