@@ -9,6 +9,7 @@ import UIKit
 
 class WeatherReportView: BaseView {
     
+    //MARK: Declare UI views
     var containerview: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 3
@@ -97,6 +98,7 @@ class WeatherReportView: BaseView {
         return label
     }()
     
+    //MARK: construct/constrain UI
     override func constructSubviewHierarchy() {
         super.constructSubviewHierarchy()
         
@@ -124,6 +126,7 @@ class WeatherReportView: BaseView {
         containerview.pinToEdges(to: self)
     }
     
+    //MARK: configure UI
     func configure(with report: CurrentWeather?) {
         guard let report = report else {
             return
@@ -139,5 +142,4 @@ class WeatherReportView: BaseView {
     func updateCurrentLocationLabel(with text: String) {
         currentLocationLabel.text = text
     }
-        
 }

@@ -63,10 +63,11 @@ class ViewController: UIViewController {
         return view
     }()
     
-    //Initialization
+    //MARK: Initialization
     var locationManager = CLLocationManager()
     let viewModel = ViewModel()
-
+    
+    //MARK: view life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         isLocationAccessEnabled()
@@ -76,7 +77,8 @@ class ViewController: UIViewController {
         viewModel.delegate = self
     }
     
-    func isLocationAccessEnabled() {
+    //MARK: setup location services
+    private func isLocationAccessEnabled() {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         DispatchQueue.global().async {
@@ -86,15 +88,9 @@ class ViewController: UIViewController {
                 self.locationManager.requestAlwaysAuthorization()
             }
         }
-        
-        DispatchQueue.global().async {
-            if !CLLocationManager.locationServicesEnabled() {
-                self.locationManager.requestAlwaysAuthorization()
-                self.locationManager.requestWhenInUseAuthorization()
-            }
-        }
     }
     
+    //MARK: Construct/Constrain UI
     private func setupUI() {
         
         containerview.addSubview(searchField)
@@ -123,6 +119,7 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: UITextFieldDelegate Implementation
 extension ViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let city = textField.text {
@@ -134,6 +131,7 @@ extension ViewController: UITextFieldDelegate {
     }
 }
 
+//MARK: CLLocationManagerDelegate Implementation
 extension ViewController: CLLocationManagerDelegate {
     //MARK: - location delegate methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -163,6 +161,7 @@ extension ViewController: CLLocationManagerDelegate {
     }
 }
 
+//MARK: ViewModelDelegate Implementation
 extension ViewController: ViewModelDelegate {
     func updateView(with report: CurrentWeather?, from searchPoint: SearchPoint) {
         switch searchPoint {

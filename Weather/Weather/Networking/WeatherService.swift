@@ -15,7 +15,6 @@ enum SearchPoint {
 
 protocol WeatherServiceType: AnyObject {
     func loadWeatherData(for city: String, completion: @escaping (WeatherReport?) -> Void)
-    func getImageData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ())
 }
 
 class WeatherService: WeatherServiceType {
@@ -42,10 +41,6 @@ class WeatherService: WeatherServiceType {
                 completion(nil)
             }
         }.resume()
-    }
-    
-    func getImageData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
     private func replaceSpacesInCityName(_ city: String) -> String {

@@ -25,6 +25,7 @@
 		03F7BD8F29F58FDC00CD07A1 /* WeatherDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7BD8E29F58FDC00CD07A1 /* WeatherDetailsView.swift */; };
 		03F7BD9129F5A2FF00CD07A1 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7BD9029F5A2FF00CD07A1 /* CurrentWeather.swift */; };
 		03F7BD9329F5A37000CD07A1 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7BD9229F5A37000CD07A1 /* UIImage+Extension.swift */; };
+		03F7BD9529F5CCD100CD07A1 /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7BD9429F5CCD100CD07A1 /* ViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		03F7BD8E29F58FDC00CD07A1 /* WeatherDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsView.swift; sourceTree = "<group>"; };
 		03F7BD9029F5A2FF00CD07A1 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		03F7BD9229F5A37000CD07A1 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		03F7BD9429F5CCD100CD07A1 /* ViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,7 +139,9 @@
 		03D65B0B29F1C7B0007B1EF4 /* WeatherTests */ = {
 			isa = PBXGroup;
 			children = (
+				03F7BD9629F5CCD600CD07A1 /* Mocks */,
 				03D65B0C29F1C7B0007B1EF4 /* WeatherTests.swift */,
+				03F7BD9429F5CCD100CD07A1 /* ViewModelTests.swift */,
 			);
 			path = WeatherTests;
 			sourceTree = "<group>";
@@ -184,6 +188,13 @@
 				03D65AF929F1C7AD007B1EF4 /* ViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		03F7BD9629F5CCD600CD07A1 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03F7BD9529F5CCD100CD07A1 /* ViewModelTests.swift in Sources */,
 				03D65B0D29F1C7B0007B1EF4 /* WeatherTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

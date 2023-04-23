@@ -14,10 +14,10 @@ protocol ViewModelDelegate: AnyObject {
 class ViewModel {
     
     private let weatherService: WeatherServiceType
-    var currentCity: String?
-    
     weak var delegate: ViewModelDelegate?
+    var weatherReport: WeatherReport?
     
+    //MARK: Initialzation
     init(weatherService: WeatherServiceType = WeatherService.sharedInstance) {
         self.weatherService = weatherService
     }
@@ -33,6 +33,7 @@ class ViewModel {
                                      from: searchPoint)
                 return
             }
+            self.weatherReport = weatherReport
             
             saveToFile(report: weatherReport)
             self.delegate?.updateView(with: builData(from: weatherReport),
@@ -47,7 +48,6 @@ class ViewModel {
     func builData(from report: WeatherReport) -> CurrentWeather {
         let code = report.weather?[0].icon ?? ""
         let icon = "https://openweathermap.org/img/wn/\(code)@2x.png"
-
         return CurrentWeather(cityName: report.name ?? "",
                               currentTemp: "\(report.main?.temp ?? 0)",
                               hTemp: "\(report.main?.temp_max ?? 0)",
