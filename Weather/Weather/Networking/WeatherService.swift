@@ -8,7 +8,7 @@
 import Foundation
 
 protocol WeatherServiceType: AnyObject {
-    func loadWeatherData(for city: String)
+    func loadWeatherData(for city: String, completion: @escaping (WeatherReport?) -> Void)
 }
 
 class WeatherService: WeatherServiceType {
@@ -16,8 +16,8 @@ class WeatherService: WeatherServiceType {
     //MARK: Shared instance
     static let sharedInstance = WeatherService()
     
-    func loadWeatherData(for city: String) {
-        var cityName = replaceSpacesInCityName(city)
+    func loadWeatherData(for city: String, completion: @escaping (WeatherReport?) -> Void) {
+        let cityName = replaceSpacesInCityName(city)
         let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=dbec85b8697521fa091bc41d3a69f1e3&units=imperial"
         let url = URL(string: urlString)
         
@@ -29,7 +29,7 @@ class WeatherService: WeatherServiceType {
             do {
                 let decoder = JSONDecoder()
                 let weatherReport = try decoder.decode(WeatherReport.self, from: data)
-
+                completion(weatherReport)
             } catch let error {
                 print(error)
             }
