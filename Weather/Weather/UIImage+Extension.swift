@@ -35,7 +35,7 @@ extension UIImageView {
             }
 
             DispatchQueue.main.async {
-                if let image = UIImage(data: data!) {
+                if let data = data, let image = UIImage(data: data) {
                     imageCache.setObject(image, forKey: urlString as NSString)
                     self.image = image
                     activityIndicator.removeFromSuperview()
